@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>spiraljs: demo-local-data</title>
+
+    <link rel="stylesheet" type="text/css" href="spiral.css">
+
+    <script type="text/javascript" src="d3.min.js"></script>
+    <script type="text/javascript" src="spiral.min.js"></script>
+
+    <!-- load local data -->
+    <script type="text/javascript" src="data.js"></script>
+  </head>
+
+  <body>
+    <div id="spiral-test"></div>
+
+    <script type="text/javascript">
+      console.log(spiral);
+      console.log(data);
+
+//      var bubblespiral = spiral.BubbleSpiral;
+//      var element = d3.select('spiral-test');
+//      bubblespiral(element);
+
+      var bubblespiral2 = new spiral.BubbleSpiral(d3.select('#spiral-test'));
+
+      bubblespiral2.period_fraction = 0.5;
+
+      var xscale = d3.time.scale();
+      xscale.domain(d3.extent(data, (record) => { return new Date(record.datestr); }));
+      xscale.range([0., 1.]);
+
+      var radius_scale = d3.scale.linear();
+      radius_scale.domain(d3.extent(data, (record) => { return record.latitude; }));
+      radius_scale.domain([41.9, 42.]);
+      radius_scale.range([1., 10.]);
+
+      bubblespiral2.radial_map = (record) => { return xscale(new Date(record.datestr)); };
+      bubblespiral2.radius_map = (record) => { return radius_scale(record.latitude); };
+
+      bubblespiral2.render(data);
+
+    </script>
+  </body>
+</html>
+
