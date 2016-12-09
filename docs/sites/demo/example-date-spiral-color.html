@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>spiraljs: demo-spiral-color</title>
+
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/spiraljs@1.0.0-alpha.3/dist/spiral.min.css">
+
+        <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17"></script>
+        <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.3"></script>
+
+        <!-- load local data -->
+        <script type="text/javascript" src="data.js"></script>
+    </head>
+
+    <body>
+        <p>
+            Demo of a BubbleSpiral chart with colored bubbles. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.3.
+        </p>
+        <div id="spiralchart"></div>
+
+        <script type="text/javascript">
+            var bubblespiral = new spiral.BubbleSpiral(d3.select('#spiralchart'));
+
+            bubblespiral.period_fraction = 1.0 / 5.75;
+
+            var xscale = d3.time.scale();
+            xscale.domain(d3.extent(data, (record) => { return new Date(record.datestr); }));
+            xscale.range([0., 1.]);
+
+            var primary_categories = [
+                "ARSON",
+                "ASSAULT",
+                "BATTERY",
+                "BURGLARY",
+                "CRIMINAL DAMAGE",
+                "CRIMINAL TRESPASS",
+                "CRIM SEXUAL ASSAULT",
+                "DECEPTIVE PRACTICE",
+                "GAMBLING",
+                "HOMICIDE",
+                "INTERFERENCE WITH PUBLIC OFFICER",
+                "INTIMIDATION",
+                "KIDNAPPING",
+                "LIQUOR LAW VIOLATION",
+                "MOTOR VEHICLE THEFT",
+                "NARCOTICS",
+                "OBSCENITY",
+                "OFFENSE INVOLVING CHILDREN",
+                "OTHER OFFENSE",
+                "PROSTITUTION",
+                "PUBLIC PEACE VIOLATION",
+                "ROBBERY",
+                "SEX OFFENSE",
+                "STALKING",
+                "THEFT",
+                "WEAPONS VIOLATION"
+            ];
+
+            var map_to_color = (record) => {
+                var index = primary_categories.indexOf(record.primary);
+                var hue = (index / primary_categories.length) * 360.0;
+                return d3.hsl(hue, 1.0, 0.5).rgb().toString();
+            };
+
+            bubblespiral.radial_map = (record) => { return xscale(new Date(record.datestr)); };
+            bubblespiral.bubble_scale_map = (record) => { return 5.0; };
+            bubblespiral.color_map = map_to_color;
+
+            bubblespiral.render(data);
+        </script>
+    </body>
+</html>
+

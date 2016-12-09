@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>spiraljs: demo-spiral-line</title>
+
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/spiraljs@1.0.0-alpha.3/dist/spiral.min.css">
+
+        <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17/d3.min.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.3/dist/spiral.js"></script>
+
+        <!-- load local data -->
+        <script type="text/javascript" src="data.js"></script>
+    </head>
+
+    <body>
+        <p>
+            Demo of a LineSpiral chart. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.3.
+        </p>
+        <div id="spiral"></div>
+
+        <script type="text/javascript">
+			var linespiral = new spiral.LineSpiral(d3.select('#spiral'));
+
+			var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
+
+			var timescale = d3.time.scale()
+			  .domain(extent)
+			  .range([0., 1.]);
+
+			var radius_scale = d3.scale.linear()
+			  .domain([41.9, 42.])
+			  .range([1., 10.]);
+
+			var day_ms = 24 * 60 * 60 * 1000;
+			linespiral.period_fraction = day_ms / (extent[1] - extent[0]);
+		    linespiral.radial_map = (record) => { return timescale(new Date(record.datestr)); };
+
+            linespiral.data = data;
+			linespiral.render();
+        </script>
+    </body>
+</html>
+

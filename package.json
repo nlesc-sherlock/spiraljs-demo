@@ -6,42 +6,38 @@
   "scripts": {
     "clean": "trash docs/sites/demo",
     "clean-downloaded": "trash node_modules/",
-    "copy-sites-demo-css": "cp node_modules/spiraljs/dist/spiral.css node_modules/spiraljs/dist/spiral.min.css docs/sites/demo/ && cp node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/bootstrap/dist/css/bootstrap-theme.min.css docs/sites/demo/bootstrap-css/",
-    "copy-sites-demo-deps": "npm run copy-sites-demo-js && npm run copy-sites-demo-css && npm run copy-sites-demo-fonts && npm run copy-sites-demo-html",
-    "copy-sites-demo-fonts": "cp node_modules/bootstrap/dist/fonts/* docs/sites/demo/fonts/",
-    "copy-sites-demo-js": "cp node_modules/d3/d3.min.js node_modules/crossfilter/crossfilter.min.js node_modules/moment/min/moment.min.js node_modules/spiraljs/dist/spiral.min.js node_modules/spiraljs/dist/spiral.min.js.map docs/sites/demo/",
+    "copy-sites-demo-deps": "npm run copy-sites-demo-html && npm run copy-sites-demo-js",
     "copy-sites-demo-html": "cp src/*.html docs/sites/demo/",
+    "copy-sites-demo-js": "cp src/*.js docs/sites/demo/",
     "demo": "npm run copy-sites-demo-deps",
     "postdemo": "tsc --target es5 src/*.ts --outDir docs/sites/demo",
-    "predemo": "npm run clean && mkdirp docs/sites/demo && mkdirp docs/sites/demo/fonts && mkdirp docs/sites/demo/bootstrap-css",
+    "predemo": "npm run clean && mkdirp docs/sites/demo",
     "purge": "npm run clean & npm run clean-downloaded"
   },
   "keywords": [
     "typescript",
-    "chicago",
-    "police",
-    "crime"
+    "spiral",
+    "visualization"
   ],
-  "author": "Johan Hidding, Mateusz Kuzak, Jurriaan H. Spaaks, Lourens Veen",
+  "author": "Johan Hidding, Mateusz Kuzak, Jurriaan H. Spaaks, Lourens Veen, Faruk Diblen",
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nlesc-sherlock/spiraljs-demo/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nlesc-sherlock/spiraljs-demo.git"
   },
   "devDependencies": {
     "@types/d3": "^3.5.36",
-    "@types/jasmine": "^2.5.38",
-    "@types/lodash": "^4.14.42",
-    "bootstrap": "^3.3.7",
-    "crossfilter": "^1.3.12",
-    "d3": "^3.5.17",
-    "moment": "^2.14.1"
-  },
-  "dependencies": {
     "mkdirp": "^0.5.1",
-    "spiraljs": "file:../spiraljs",
     "trash-cli": "^1.3.0",
-    "typescript": "^2.0.10",
-    "typings": "^2.0.0"
+    "typescript": "^2.0.10"
+  },
+  "homepage": "https://github.com/nlesc-sherlock/spiraljs-demo#readme",
+  "dependencies": {
+    "@types/d3": "^3.5.36",
+    "d3": "^3.5.17",
+    "spiraljs": "^1.0.0-alpha.1"
   }
 }
