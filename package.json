@@ -8,7 +8,7 @@
     "clean-downloaded": "trash node_modules/",
     "copy-sites-demo-css": "cp node_modules/spiraljs/dist/spiral.css node_modules/spiraljs/dist/spiral.min.css docs/sites/demo/",
     "copy-sites-demo-deps": "npm run copy-sites-demo-js && npm run copy-sites-demo-css && npm run copy-sites-demo-html",
-    "copy-sites-demo-js": "cp src/*.js node_modules/spiraljs/dist/spiral.min.js node_modules/spiraljs/dist/spiral.min.js.map docs/sites/demo/ && cp node_modules/d3/index.js docs/sites/demo/d3.js",
+    "copy-sites-demo-js": "cp src/*.js node_modules/d3/build/d3.min.js node_modules/spiraljs/dist/spiral.min.js node_modules/spiraljs/dist/spiral.min.js.map docs/sites/demo/",
     "copy-sites-demo-html": "cp src/*.html docs/sites/demo/",
     "demo": "npm run copy-sites-demo-deps",
     "postdemo": "tsc --target es5 src/*.ts --outDir docs/sites/demo",
