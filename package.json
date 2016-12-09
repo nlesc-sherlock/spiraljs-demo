@@ -8,7 +8,7 @@
     "clean-downloaded": "trash node_modules/",
     "copy-sites-demo-css": "cp node_modules/spiraljs/dist/spiral.css node_modules/spiraljs/dist/spiral.min.css docs/sites/demo/",
     "copy-sites-demo-deps": "npm run copy-sites-demo-js && npm run copy-sites-demo-css && npm run copy-sites-demo-html",
-    "copy-sites-demo-js": "cp src/*.js node_modules/d3/d3.min.js node_modules/spiraljs/dist/spiral.min.js node_modules/spiraljs/dist/spiral.min.js.map docs/sites/demo/",
+    "copy-sites-demo-js": "cp src/*.js node_modules/spiraljs/dist/spiral.min.js node_modules/spiraljs/dist/spiral.min.js.map docs/sites/demo/ && cp node_modules/d3/index.js docs/sites/demo/d3.js",
     "copy-sites-demo-html": "cp src/*.html docs/sites/demo/",
     "demo": "npm run copy-sites-demo-deps",
     "postdemo": "tsc --target es5 src/*.ts --outDir docs/sites/demo",
@@ -30,15 +30,15 @@
     "url": "https://github.com/nlesc-sherlock/spiraljs-demo.git"
   },
   "devDependencies": {
-    "@types/d3": "^3.5.36",
+    "@types/d3": "^4.4.0",
     "mkdirp": "^0.5.1",
     "trash-cli": "^1.3.0",
     "typescript": "^2.0.10"
   },
   "homepage": "https://github.com/nlesc-sherlock/spiraljs-demo#readme",
   "dependencies": {
-    "@types/d3": "^3.5.36",
-    "d3": "^3.5.17",
+    "@types/d3": "^4.4.0",
+    "d3": "^4.4.0",
     "spiraljs": "^1.0.0-alpha.1"
   }
 }

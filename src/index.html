@@ -25,9 +25,9 @@
 //      var element = d3.select('spiral-test');
 //      bubblespiral(element);
 
-      var bubblespiral2 = new spiral.BubbleSpiral(d3.select('#spiral-test'));
+      var bubblespiral2 = new spiral.LineSpiral(d3.select('#spiral-test'));
 
-      bubblespiral2.period_fraction = 0.5;
+      bubblespiral2.period_fraction = 0.09111;
 
       var xscale = d3.time.scale();
       xscale.domain(d3.extent(data, (record) => { return new Date(record.datestr); }));
@@ -39,11 +39,11 @@
       radius_scale.range([1., 10.]);
 
       bubblespiral2.radial_map = (record) => { return xscale(new Date(record.datestr)); };
-      bubblespiral2.radius_map = (record) => { return radius_scale(record.latitude); };
+      bubblespiral2.weight_map = (record) => { return radius_scale(record.latitude); };
 
-      bubblespiral2.render(data);
+      bubblespiral2.data = data;
+      bubblespiral2.render();
 
     </script>
   </body>
 </html>
-
