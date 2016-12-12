@@ -10,7 +10,6 @@
     "copy-sites-demo-html": "cp src/*.html docs/sites/demo/",
     "copy-sites-demo-js": "cp src/*.js docs/sites/demo/",
     "demo": "npm run copy-sites-demo-deps",
-    "postdemo": "tsc --target es5 src/*.ts --outDir docs/sites/demo",
     "predemo": "npm run clean && mkdirp docs/sites/demo",
     "purge": "npm run clean & npm run clean-downloaded"
   },
@@ -36,8 +35,7 @@
   },
   "homepage": "https://github.com/nlesc-sherlock/spiraljs-demo#readme",
   "dependencies": {
-    "@types/d3": "^3.5.36",
     "d3": "^3.5.17",
-    "spiraljs": "^1.0.0-alpha.1"
+    "spiraljs": "^1.0.0-alpha.4"
   }
 }
