@@ -36,6 +36,6 @@
   "homepage": "https://github.com/nlesc-sherlock/spiraljs-demo#readme",
   "dependencies": {
     "d3": "^3.5.17",
-    "spiraljs": "^1.0.0-alpha.1"
+    "spiraljs": "^1.0.0-alpha.4"
   }
 }
