@@ -18,26 +18,254 @@
 <body>
 
     <script>
+
+        var calcAngle = (x) => {
+            var angle = 2 * Math.PI * (x.diff(domain[0], 'days', true)) / wavelength;
+            if (clockwise) {
+                return angle;
+            } else {
+                return Math.PI * 2 - angle;
+            }
+        };
+        var calcInnerRadius = (x) => {
+            var iHalfTurn = Math.floor(calcAngle(x) / Math.PI);
+            var x;
+            if (inward) {
+                console.log('asdasd');
+            } else {
+                return innerRadius + ((iHalfTurn + 2 * offset) / nHalfTurns) * (outerRadius - innerRadius);
+            }
+        };
+        var calcOuterRadius = (x) => {
+            var iHalfTurn = Math.floor(calcAngle(x) / Math.PI);
+            var x;
+            if (inward) {
+                console.log('asdasd');
+            } else {
+                return innerRadius + ((iHalfTurn + 2 * offset + 2 * height) / nHalfTurns) * (outerRadius - innerRadius);
+            }
+        };
+
         var data = [{
-            "date": "2016-09-22T11:42:42+02:00"
+        	"commit-date": "2016-09-22T11:42:42+02:00"
         }, {
-            "date": "2016-09-22T11:27:49+02:00"
+        	"commit-date": "2016-09-22T11:27:49+02:00"
         }, {
-            "date": "2016-09-21T11:44:37+02:00"
+        	"commit-date": "2016-09-21T11:44:37+02:00"
         }, {
-            "date": "2016-09-21T11:44:21+02:00"
+        	"commit-date": "2016-09-21T11:44:21+02:00"
         }, {
-            "date": "2016-09-21T11:43:59+02:00"
+        	"commit-date": "2016-09-21T11:43:59+02:00"
         }, {
-            "date": "2016-09-21T10:36:13+02:00"
+        	"commit-date": "2016-09-21T10:36:13+02:00"
         }, {
-            "date": "2016-09-20T18:10:28+02:00"
+        	"commit-date": "2016-09-20T18:10:28+02:00"
         }, {
-            "date": "2016-09-20T18:10:08+02:00"
+        	"commit-date": "2016-09-20T18:10:08+02:00"
+        }, {
+        	"commit-date": "2016-09-20T18:09:49+02:00"
+        }, {
+        	"commit-date": "2016-09-20T17:01:35+02:00"
+        }, {
+        	"commit-date": "2016-09-20T17:01:14+02:00"
+        }, {
+        	"commit-date": "2016-09-20T17:00:36+02:00"
+        }, {
+        	"commit-date": "2016-09-20T16:57:12+02:00"
+        }, {
+        	"commit-date": "2016-09-20T16:55:48+02:00"
+        }, {
+        	"commit-date": "2016-09-20T14:19:28+02:00"
+        }, {
+        	"commit-date": "2016-09-20T13:33:59+02:00"
+        }, {
+        	"commit-date": "2016-09-20T12:39:55+02:00"
+        }, {
+        	"commit-date": "2016-09-20T12:39:36+02:00"
+        }, {
+        	"commit-date": "2016-09-20T12:39:09+02:00"
+        }, {
+        	"commit-date": "2016-09-20T12:38:37+02:00"
+        }, {
+        	"commit-date": "2016-09-20T12:36:02+02:00"
+        }, {
+        	"commit-date": "2016-09-20T12:34:57+02:00"
+        }, {
+        	"commit-date": "2016-09-20T11:02:17+02:00"
+        }, {
+        	"commit-date": "2016-09-20T10:37:58+02:00"
+        }, {
+        	"commit-date": "2016-09-20T10:36:32+02:00"
+        }, {
+        	"commit-date": "2016-09-20T10:35:15+02:00"
+        }, {
+        	"commit-date": "2016-09-19T18:07:12+02:00"
+        }, {
+        	"commit-date": "2016-09-19T18:06:40+02:00"
+        }, {
+        	"commit-date": "2016-09-19T17:50:37+02:00"
+        }, {
+        	"commit-date": "2016-09-19T17:07:00+02:00"
+        }, {
+        	"commit-date": "2016-09-19T17:06:43+02:00"
+        }, {
+        	"commit-date": "2016-09-19T17:04:19+02:00"
+        }, {
+        	"commit-date": "2016-09-19T17:03:10+02:00"
+        }, {
+        	"commit-date": "2016-09-19T16:58:23+02:00"
+        }, {
+        	"commit-date": "2016-09-19T16:52:55+02:00"
+        }, {
+        	"commit-date": "2016-09-19T16:49:38+02:00"
+        }, {
+        	"commit-date": "2016-09-19T16:43:20+02:00"
+        }, {
+        	"commit-date": "2016-09-19T16:40:38+02:00"
+        }, {
+        	"commit-date": "2016-09-19T16:23:33+02:00"
+        }, {
+        	"commit-date": "2016-09-19T16:16:40+02:00"
+        }, {
+        	"commit-date": "2016-09-15T17:02:15+02:00"
+        }, {
+        	"commit-date": "2016-09-15T17:00:52+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:54:41+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:50:01+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:47:20+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:46:12+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:45:26+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:44:55+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:44:12+02:00"
+        }, {
+        	"commit-date": "2016-09-15T16:40:02+02:00"
+        }, {
+        	"commit-date": "2016-09-14T14:24:20+02:00"
+        }, {
+        	"commit-date": "2016-09-14T14:20:37+02:00"
+        }, {
+        	"commit-date": "2016-09-14T13:31:19+02:00"
+        }, {
+        	"commit-date": "2016-09-14T13:29:42+02:00"
+        }, {
+        	"commit-date": "2016-09-14T13:22:51+02:00"
+        }, {
+        	"commit-date": "2016-09-14T11:27:34+02:00"
+        }, {
+        	"commit-date": "2016-09-14T11:22:09+02:00"
+        }, {
+        	"commit-date": "2016-09-14T11:20:39+02:00"
+        }, {
+        	"commit-date": "2016-09-13T18:34:48+02:00"
+        }, {
+        	"commit-date": "2016-09-13T18:32:48+02:00"
+        }, {
+        	"commit-date": "2016-09-13T18:32:36+02:00"
+        }, {
+        	"commit-date": "2016-09-13T18:26:56+02:00"
+        }, {
+        	"commit-date": "2016-09-13T16:49:24+02:00"
+        }, {
+        	"commit-date": "2016-09-13T16:27:12+02:00"
+        }, {
+        	"commit-date": "2016-09-13T16:26:44+02:00"
+        }, {
+        	"commit-date": "2016-09-13T14:33:55+02:00"
+        }, {
+        	"commit-date": "2016-09-13T14:30:24+02:00"
+        }, {
+        	"commit-date": "2016-09-13T14:27:50+02:00"
+        }, {
+        	"commit-date": "2016-09-13T10:12:14+02:00"
+        }, {
+        	"commit-date": "2016-09-13T10:06:27+02:00"
+        }, {
+        	"commit-date": "2016-09-13T10:03:40+02:00"
+        }, {
+        	"commit-date": "2016-09-13T09:54:40+02:00"
+        }, {
+        	"commit-date": "2016-09-12T14:04:07+02:00"
+        }, {
+        	"commit-date": "2016-09-12T13:59:58+02:00"
+        }, {
+        	"commit-date": "2016-09-12T13:55:54+02:00"
+        }, {
+        	"commit-date": "2016-09-12T13:52:39+02:00"
+        }, {
+        	"commit-date": "2016-09-12T13:48:05+02:00"
+        }, {
+        	"commit-date": "2016-09-12T13:44:46+02:00"
+        }, {
+        	"commit-date": "2016-09-12T13:43:38+02:00"
+        }, {
+        	"commit-date": "2016-09-08T16:54:43+02:00"
+        }, {
+        	"commit-date": "2016-09-08T14:34:25+02:00"
+        }, {
+        	"commit-date": "2016-09-08T14:03:29+02:00"
+        }, {
+        	"commit-date": "2016-09-08T13:48:26+02:00"
+        }, {
+        	"commit-date": "2016-09-08T13:47:39+02:00"
+        }, {
+        	"commit-date": "2016-09-08T13:44:57+02:00"
+        }, {
+        	"commit-date": "2016-09-08T11:42:19+02:00"
+        }, {
+        	"commit-date": "2016-09-07T17:14:26+02:00"
+        }, {
+        	"commit-date": "2016-09-07T17:12:40+02:00"
+        }, {
+        	"commit-date": "2016-09-07T16:42:34+02:00"
+        }, {
+        	"commit-date": "2016-09-07T16:22:13+02:00"
+        }, {
+        	"commit-date": "2016-09-07T16:17:20+02:00"
+        }, {
+        	"commit-date": "2016-09-07T16:15:03+02:00"
+        }, {
+        	"commit-date": "2016-09-07T16:08:49+02:00"
+        }, {
+        	"commit-date": "2016-09-07T16:08:07+02:00"
+        }, {
+        	"commit-date": "2016-09-06T16:23:16+02:00"
+        }, {
+        	"commit-date": "2016-09-06T15:22:13+02:00"
+        }, {
+        	"commit-date": "2016-09-06T15:19:49+02:00"
+        }, {
+        	"commit-date": "2016-09-06T14:58:39+02:00"
+        }, {
+        	"commit-date": "2016-09-06T14:22:47+02:00"
+        }, {
+        	"commit-date": "2016-09-06T14:20:28+02:00"
+        }, {
+        	"commit-date": "2016-09-06T14:13:33+02:00"
+        }, {
+        	"commit-date": "2016-09-06T14:06:02+02:00"
+        }, {
+        	"commit-date": "2016-09-06T13:33:07+02:00"
+        }, {
+        	"commit-date": "2016-09-06T13:31:41+02:00"
+        }, {
+        	"commit-date": "2016-09-06T12:21:41+02:00"
+        }, {
+        	"commit-date": "2016-09-06T12:13:08+02:00"
+        }, {
+        	"commit-date": "2016-09-06T12:10:01+02:00"
+        }, {
+        	"commit-date": "2016-09-01T17:08:48+02:00"
         }];
 
         data = data.map((d) => {
-            d.date = moment(d.date);
+            d.date = moment(d["commit-date"]);
             return d;
         })
 
@@ -48,12 +276,28 @@
         domain[1] = domain[1].endOf("day");
 
         var thresholds = [
+            "2016-09-01T00:00:00+02:00",
+            "2016-09-02T00:00:00+02:00",
+            "2016-09-03T00:00:00+02:00",
+            "2016-09-04T00:00:00+02:00",
+            "2016-09-05T00:00:00+02:00",
+            "2016-09-06T00:00:00+02:00",
+            "2016-09-07T00:00:00+02:00",
+            "2016-09-08T00:00:00+02:00",
+            "2016-09-09T00:00:00+02:00",
+            "2016-09-10T00:00:00+02:00",
+            "2016-09-11T00:00:00+02:00",
+            "2016-09-12T00:00:00+02:00",
+            "2016-09-13T00:00:00+02:00",
+            "2016-09-14T00:00:00+02:00",
+            "2016-09-15T00:00:00+02:00",
+            "2016-09-16T00:00:00+02:00",
+            "2016-09-17T00:00:00+02:00",
+            "2016-09-18T00:00:00+02:00",
+            "2016-09-19T00:00:00+02:00",
             "2016-09-20T00:00:00+02:00",
-            "2016-09-20T12:00:00+02:00",
             "2016-09-21T00:00:00+02:00",
-            "2016-09-21T00:12:00+02:00",
             "2016-09-22T00:00:00+02:00",
-            "2016-09-22T00:12:00+02:00",
             "2016-09-23T00:00:00+02:00"
         ].map((d) => {
             return moment(d);
@@ -63,22 +307,21 @@
             return d.date;
         }
 
-
         // public api variables:
         var bins = d3.histogram()
             .domain(domain)
             .thresholds(thresholds)
             .value(accessor)
             (data);
-        var wavelength = 2.0; // days
-        var start = 0.125 * 2 * Math.PI;
-        var direction = ["counterclockwise", "inward"];
+        var direction = ["clockwise", "outward"];
+        var height = 0.8;
         var innerRadius = 100; // pixels
-        var outerRadius = 190; // pixels
-        var height = 0.5;
-        var offset = 1.0 - height;
+        var outerRadius = 160; // pixels
+        var start = 0/8 * 2 * Math.PI;
+        var wavelength = 8.0; // days
 
         // derived variables below this point
+        var offset = (1.0 - height) / 2;
 
         if (direction.indexOf('clockwise') !== -1) {
             var clockwise = true;
@@ -96,9 +339,9 @@
             throw new Error('direction does not contain one of [\'clockwise\', \'counterclockwise\'] ');
         }
 
-        var radiusRange = (outerRadius - innerRadius);
-
-
+        var nBins = bins.length;
+        var nTurns = Math.ceil(domain[1].diff(domain[0], 'days', true) / wavelength) + 1
+        var nHalfTurns = nTurns * 2;
 
         // TODO cut up bins when they cross the radiusBoundary
 
@@ -132,29 +375,26 @@
         var axis = d3.select("svg").append("g")
             .attr("class", "axis");
 
-        var nBins = bins.length;
-
         var spiralTransform = (bin , iBin) => {
             var s = "translate(" + svgCenter.x.toString() +
-                ", " + svgCenter.y.toString() + ")" +
-                "rotate(" + (360 * start / 2/ Math.PI).toString() + ")";
-            if (iBin % 2 === 1) {
-                s += "translate(0," + (-1 * radiusRange / nBins / 2 ).toString() + ")";
+                ", " + svgCenter.y.toString() + ")";
+
+            var angle = calcAngle(bin.x0);
+            var iHalfTurn = Math.floor(angle / Math.PI);
+
+            if (iHalfTurn % 2 === 1) {
+                s += " translate(0," + (-1 * (outerRadius - innerRadius) / nHalfTurns ).toString() + ") ";
             }
 
             return s;
         };
 
         var arcmaker = (bin, iBin) => {
-            if (inward) {
-                var ir = innerRadius + (((nBins - iBin) / 2 + offset) / nBins) * radiusRange;
-                var or = innerRadius + (((nBins - iBin) / 2 + offset + height) / nBins) * radiusRange;
-            } else {
-                var ir = innerRadius + ((iBin / 2 + offset) / nBins) * radiusRange;
-                var or = innerRadius + ((iBin / 2 + offset + height) / nBins) * radiusRange;
-            }
-            var sa = (iBin % 2 === 0) ? 0 :  Math.PI;
-            var ea = sa + (clockwise ? 1 : -1) * Math.PI;
+
+            var ir = calcInnerRadius(bin.x0);
+            var or = calcOuterRadius(bin.x0);
+            var sa = start + calcAngle(bin.x0);
+            var ea = start + calcAngle(bin.x1);
             var arc = d3.arc()
                 .innerRadius(ir)
                 .outerRadius(or)
@@ -181,7 +421,10 @@
                 .attr("d", arcmaker)
                 .attr("transform", spiralTransform)
                 .style("fill", (bin) => {return colorScale(bin.length)})
-                .style("stroke", (bin) => {return colorScale(bin.length)});
+                .style("stroke", 'black')
+                .on("click", (bin, iBin) => {
+                    console.log('bin: ', bin, ', iBin: ', iBin);
+                });
 
         console.log('clockwise: ', clockwise, '; inward: ', inward, 'start: ', start.toFixed(3));
 
