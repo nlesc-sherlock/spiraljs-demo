@@ -19,32 +19,6 @@
 
     <script>
 
-        var calcAngle = (x) => {
-            var angle = 2 * Math.PI * (x.diff(domain[0], 'days', true)) / wavelength;
-            if (clockwise) {
-                return angle;
-            } else {
-                return Math.PI * 2 - angle;
-            }
-        };
-        var calcInnerRadius = (x) => {
-            var iHalfTurn = Math.floor(calcAngle(x) / Math.PI);
-            var x;
-            if (inward) {
-                console.log('asdasd');
-            } else {
-                return innerRadius + ((iHalfTurn + 2 * offset) / nHalfTurns) * (outerRadius - innerRadius);
-            }
-        };
-        var calcOuterRadius = (x) => {
-            var iHalfTurn = Math.floor(calcAngle(x) / Math.PI);
-            var x;
-            if (inward) {
-                console.log('asdasd');
-            } else {
-                return innerRadius + ((iHalfTurn + 2 * offset + 2 * height) / nHalfTurns) * (outerRadius - innerRadius);
-            }
-        };
 
         var data = [{
         	"commit-date": "2016-09-22T11:42:42+02:00"
@@ -269,6 +243,30 @@
             return d;
         })
 
+        var calcAngle = (x) => {
+            var angle = 2 * Math.PI * (x.diff(domain[0], 'days', true)) / wavelength;
+            if (clockwise) {
+                return angle;
+            } else {
+                return Math.PI * 2 - angle;
+            }
+        };
+        var calcInnerRadius = (x) => {
+            var iHalfTurn = Math.floor(calcAngle(x) / Math.PI);
+            if (inward) {
+                console.log('asdasd');
+            } else {
+                return innerRadius + ((iHalfTurn + 2 * offset) / nHalfTurns) * (outerRadius - innerRadius);
+            }
+        };
+        var calcOuterRadius = (x) => {
+            var iHalfTurn = Math.floor(calcAngle(x) / Math.PI);
+            if (inward) {
+                console.log('asdasd');
+            } else {
+                return innerRadius + ((iHalfTurn + 2 * offset + 2 * height) / nHalfTurns) * (outerRadius - innerRadius);
+            }
+        };
         var domain = d3.extent(data, (d) => {
             return d.date;
         });
@@ -317,8 +315,8 @@
         var height = 0.8;
         var innerRadius = 100; // pixels
         var outerRadius = 160; // pixels
-        var start = 0/8 * 2 * Math.PI;
-        var wavelength = 8.0; // days
+        var start = 10 / 12 * 2 * Math.PI;
+        var wavelength = 12.0; // days
 
         // derived variables below this point
         var offset = (1.0 - height) / 2;
@@ -380,6 +378,8 @@
                 ", " + svgCenter.y.toString() + ")";
 
             var angle = calcAngle(bin.x0);
+            s += " rotate(" + (360 * start / Math.PI / 2).toString() + ")";
+
             var iHalfTurn = Math.floor(angle / Math.PI);
 
             if (iHalfTurn % 2 === 1) {
@@ -393,8 +393,8 @@
 
             var ir = calcInnerRadius(bin.x0);
             var or = calcOuterRadius(bin.x0);
-            var sa = start + calcAngle(bin.x0);
-            var ea = start + calcAngle(bin.x1);
+            var sa = calcAngle(bin.x0);
+            var ea = calcAngle(bin.x1);
             var arc = d3.arc()
                 .innerRadius(ir)
                 .outerRadius(or)
