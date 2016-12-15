@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+
+        .arc {
+            fill: steelblue;
+            stroke: steelblue;
+        }
+
+    </style>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var data = [{
+            "date": "2016-09-22T11:42:42+02:00"
+        }, {
+            "date": "2016-09-22T11:27:49+02:00"
+        }, {
+            "date": "2016-09-21T11:44:37+02:00"
+        }, {
+            "date": "2016-09-21T11:44:21+02:00"
+        }, {
+            "date": "2016-09-21T11:43:59+02:00"
+        }, {
+            "date": "2016-09-21T10:36:13+02:00"
+        }, {
+            "date": "2016-09-20T18:10:28+02:00"
+        }, {
+            "date": "2016-09-20T18:10:08+02:00"
+        }];
+
+        data = data.map((d) => {
+            d.date = moment(d.date);
+            return d;
+        })
+
+        var domain = d3.extent(data, (d) => {
+            return d.date;
+        });
+        domain[0] = domain[0].startOf("day");
+        domain[1] = domain[1].endOf("day");
+
+        var thresholds = [
+            "2016-09-20T00:00:00+02:00",
+            "2016-09-20T12:00:00+02:00",
+            "2016-09-21T00:00:00+02:00",
+            "2016-09-21T00:12:00+02:00",
+            "2016-09-22T00:00:00+02:00",
+            "2016-09-22T00:12:00+02:00",
+            "2016-09-23T00:00:00+02:00"
+        ].map((d) => {
+            return moment(d);
+        });
+
+        var accessor = (d) => {
+            return d.date;
+        }
+
+
+        // public api variables:
+        var bins = d3.histogram()
+            .domain(domain)
+            .thresholds(thresholds)
+            .value(accessor)
+            (data);
+        var wavelength = 2.0; // days
+        var start = 0.125 * 2 * Math.PI;
+        var direction = ["counterclockwise", "inward"];
+        var innerRadius = 100; // pixels
+        var outerRadius = 190; // pixels
+        var height = 0.5;
+        var offset = 1.0 - height;
+
+        // derived variables below this point
+
+        if (direction.indexOf('clockwise') !== -1) {
+            var clockwise = true;
+        } else if (direction.indexOf('counterclockwise') !== -1) {
+            var clockwise = false;
+        } else {
+            throw new Error('direction does not contain one of [\'clockwise\', \'counterclockwise\'] ');
+        }
+
+        if (direction.indexOf('inward') !== -1) {
+            var inward = true;
+        } else if (direction.indexOf('outward') !== -1) {
+            var inward = false;
+        } else {
+            throw new Error('direction does not contain one of [\'clockwise\', \'counterclockwise\'] ');
+        }
+
+        var radiusRange = (outerRadius - innerRadius);
+
+
+
+        // TODO cut up bins when they cross the radiusBoundary
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", 400)
+            .attr("height", 400);
+
+        var svgCenter = {
+            x: +svg.attr("width") / 2,
+            y: +svg.attr("height") / 2
+        };
+
+        svg.append("circle")
+            .attr("class", "outerRadius")
+            .attr("cx", svgCenter.x)
+            .attr("cy", svgCenter.y)
+            .attr("r", outerRadius)
+            .attr("fill", "rgb(222, 222, 222)")
+            .attr("stroke", "gray");
+
+        svg.append("circle")
+            .attr("class", "innerRadius")
+            .attr("cx", svgCenter.x)
+            .attr("cy", svgCenter.y)
+            .attr("r", innerRadius)
+            .attr("fill", "white")
+            .attr("stroke", "gray");
+
+
+        var axis = d3.select("svg").append("g")
+            .attr("class", "axis");
+
+        var nBins = bins.length;
+
+        var spiralTransform = (bin , iBin) => {
+            var s = "translate(" + svgCenter.x.toString() +
+                ", " + svgCenter.y.toString() + ")" +
+                "rotate(" + (360 * start / 2/ Math.PI).toString() + ")";
+            if (iBin % 2 === 1) {
+                s += "translate(0," + (-1 * radiusRange / nBins / 2 ).toString() + ")";
+            }
+
+            return s;
+        };
+
+        var arcmaker = (bin, iBin) => {
+            if (inward) {
+                var ir = innerRadius + (((nBins - iBin) / 2 + offset) / nBins) * radiusRange;
+                var or = innerRadius + (((nBins - iBin) / 2 + offset + height) / nBins) * radiusRange;
+            } else {
+                var ir = innerRadius + ((iBin / 2 + offset) / nBins) * radiusRange;
+                var or = innerRadius + ((iBin / 2 + offset + height) / nBins) * radiusRange;
+            }
+            var sa = (iBin % 2 === 0) ? 0 :  Math.PI;
+            var ea = sa + (clockwise ? 1 : -1) * Math.PI;
+            var arc = d3.arc()
+                .innerRadius(ir)
+                .outerRadius(or)
+                .startAngle(sa)
+                .endAngle(ea)
+            return arc();
+        };
+
+        var colorFrom = d3.rgb("#007AFF");
+        var colorTo = d3.rgb('#FFF500');
+        var yExtent = d3.extent(bins, (bin) => {
+            return bin.length;
+        });
+        var colorScale = d3.scaleLinear()
+            .domain(yExtent)
+            .range([colorFrom, colorTo])
+            .interpolate(d3.interpolateHcl);
+
+        var arcs = axis.selectAll(".arc")
+            .data(bins)
+            .enter()
+            .append("path")
+                .attr("class", "arc")
+                .attr("d", arcmaker)
+                .attr("transform", spiralTransform)
+                .style("fill", (bin) => {return colorScale(bin.length)})
+                .style("stroke", (bin) => {return colorScale(bin.length)});
+
+        console.log('clockwise: ', clockwise, '; inward: ', inward, 'start: ', start.toFixed(3));
+
+    </script>
+</body>
+
+</html>
