@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>spiraljs: demo-spiral-arc</title>
+
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.css">
+
+        <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17/d3.min.js"></script>
+        <!-- <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.js"></script> -->
+        <script type="text/javascript" src="../spiraljs/dist/spiral.js"></script>
+
+        <!-- load local data -->
+        <script type="text/javascript" src="data.js"></script>
+    </head>
+
+    <body>
+        <p>
+            Demo of a ArcSpiral chart. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
+        </p>
+        <div id="spiral"></div>
+
+        <!-- slide between period of one minute to about a month -->
+        <div id="slider">
+            <input style="width: 50em;" type="range" id="slider-widget"
+                min="6.0" max="10.0" step="0.0001"
+                oninput="showValue(10**this.value,false)"/>
+            <span id="slider-value">?</span>
+        </div>
+        <div id="presets">
+            <button type="button" value="3.6e6" onclick="showValue(this.value,true)">1 hour</button>
+            <button type="button" value="8.64e7" onclick="showValue(this.value,true)">1 day</button>
+            <button type="button" value="6.048e8" onclick="showValue(this.value,true)">1 week</button>
+            <button type="button" value="3.156e10" onclick="showValue(this.value,true)">~1 year</button>
+        </div>
+
+        <script type="text/javascript">
+            function showValue(newValue, move_slider)
+            {
+                if (move_slider)
+                {
+                    document.getElementById("slider-widget").value = Math.log10(newValue);
+                }
+                document.getElementById("slider-value").innerHTML=msToStr(newValue);
+                update_period_ms(newValue);
+            }
+        </script>
+
+        <script type="text/javascript">
+            var arcspiral = new spiral.ArcSpiral(d3.select('#spiral'));
+
+            var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
+
+            var timescale = d3.time.scale()
+              .domain(extent)
+              .range([0., 1.]);
+
+            var radius_scale = d3.scale.linear()
+              .domain([41.9, 42.])
+              .range([1., 10.]);
+
+            arcspiral.radial_map = (record) => { return timescale(new Date(record.datestr)); };
+
+            function set_period_ms(ms)
+            {
+                arcspiral.period_fraction = ms / (extent[1] - extent[0]);
+            }
+
+            function update_period_ms(ms)
+            {
+                set_period_ms(ms);
+                arcspiral.update(data);
+            }
+
+            var day_ms = 24 * 60 * 60 * 1000;
+            set_period_ms(day_ms);
+
+            arcspiral.data = data;
+            arcspiral.render();
+        </script>
+        <!-- Snippet from StackOverflow: http://stackoverflow.com/questions/8211744 -->
+        <script type="text/javascript">
+            function msToStr (milliseconds) {
+                // TIP: to find current time in milliseconds, use:
+                // var  current_time_milliseconds = new Date().getTime();
+
+                function numberEnding (number) {
+                    return (number > 1) ? 's' : '';
+                }
+
+                var temp = Math.floor(milliseconds / 1000);
+                var years = Math.floor(temp / 31536000);
+                if (years) {
+                    return (temp / 31536000) + ' year' + numberEnding(years);
+                }
+                //TODO: Months! Maybe weeks?
+                var days = Math.floor((temp %= 31536000) / 86400);
+                if (days) {
+                    return (temp / 86400) + ' day' + numberEnding(days);
+                }
+                var hours = Math.floor((temp %= 86400) / 3600);
+                if (hours) {
+                    return (temp / 3600) + ' hour' + numberEnding(hours);
+                }
+                var minutes = Math.floor((temp %= 3600) / 60);
+                if (minutes) {
+                    return (temp / 60) + ' minute' + numberEnding(minutes);
+                }
+                var seconds = temp % 60;
+                if (seconds) {
+                    return temp + ' second' + numberEnding(seconds);
+                }
+                return 'less than a second'; //'just now' //or other string you like;
+            }
+        </script>
+    </body>
+</html>
