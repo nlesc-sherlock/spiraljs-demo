@@ -11,7 +11,9 @@
         <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4"></script>
 
         <!-- load local data -->
-        <script type="text/javascript" src="data.js"></script>
+        <script type="text/javascript" src="brwaa_2010-2015.js"></script>
+        <script type="text/javascript" src="brwaa_2010-2015_inctype_categories.js"></script>
+        <script type="text/javascript" src="brwaa_2010-2015_inctype_colors.js"></script>
     </head>
 
     <body>
@@ -23,49 +25,23 @@
         <script type="text/javascript">
             var bubblespiral = new spiral.BubbleSpiral(d3.select('#spiralchart'));
 
-            bubblespiral.period_fraction = 1.0 / 5.75;
-
             var xscale = d3.time.scale();
-            xscale.domain(d3.extent(data, (record) => { return new Date(record.datestr); }));
+            var time_extent = d3.extent(data, (record) => { return new Date(record.start_tijd); });
+            xscale.domain(time_extent);
             xscale.range([0., 1.]);
 
-            var primary_categories = [
-                "ARSON",
-                "ASSAULT",
-                "BATTERY",
-                "BURGLARY",
-                "CRIMINAL DAMAGE",
-                "CRIMINAL TRESPASS",
-                "CRIM SEXUAL ASSAULT",
-                "DECEPTIVE PRACTICE",
-                "GAMBLING",
-                "HOMICIDE",
-                "INTERFERENCE WITH PUBLIC OFFICER",
-                "INTIMIDATION",
-                "KIDNAPPING",
-                "LIQUOR LAW VIOLATION",
-                "MOTOR VEHICLE THEFT",
-                "NARCOTICS",
-                "OBSCENITY",
-                "OFFENSE INVOLVING CHILDREN",
-                "OTHER OFFENSE",
-                "PROSTITUTION",
-                "PUBLIC PEACE VIOLATION",
-                "ROBBERY",
-                "SEX OFFENSE",
-                "STALKING",
-                "THEFT",
-                "WEAPONS VIOLATION"
-            ];
+            var one_year = 365.25*24*60*60*1000;
+            var one_month = one_year / 12;
+            var one_week = 7*24*60*60*1000;
+            bubblespiral.period_fraction = one_week / (time_extent[1].getTime() - time_extent[0].getTime());
 
             var map_to_color = (record) => {
-                var index = primary_categories.indexOf(record.primary);
-                var hue = (index / primary_categories.length) * 360.0;
-                return d3.hsl(hue, 1.0, 0.5).rgb().toString();
+                var index = primary_categories.indexOf(record.incident_type);
+                return category_colors[index];
             };
 
-            bubblespiral.radial_map = (record) => { return xscale(new Date(record.datestr)); };
-            bubblespiral.bubble_scale_map = (record) => { return 5.0; };
+            bubblespiral.radial_map = (record) => { return xscale(new Date(record.start_tijd)); };
+            bubblespiral.bubble_scale_map = (record) => { return 3.0; };
             bubblespiral.color_map = map_to_color;
 
             bubblespiral.render(data);
