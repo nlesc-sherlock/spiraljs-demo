@@ -6,6 +6,18 @@
         <title>spiraljs: demo-spiral-color</title>
 
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.css">
+        <style type="text/css">
+            div#description {
+                float: right;
+                width: 30%;
+                margin: 4em;
+            }
+
+            div#spiralchart {
+                clear: none;
+                width: 50%;
+            }
+        </style>
 
         <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17"></script>
         <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4"></script>
@@ -17,9 +29,18 @@
     </head>
 
     <body>
-        <p>
-            Demo of a BubbleSpiral chart with colored bubbles. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
-        </p>
+        <div id="description">
+            <p>
+                Demo of a BubbleSpiral chart with colored bubbles. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
+            </p>
+            <p>
+                Data from Veiligheidsregio Amsterdam-Amstelland, via the Municipality of Amsterdam Open Data
+                Initiative. The graph shows fire department calls in the city of Amsterdam for 2014. Notable
+                events include a large number of fire-related calls on New Year's Day (red dot in the center),
+                and a massive shower on the 28th of July 2014 that resulted in flooding throughout the city
+                (cyan streak on the left).
+            </p>
+        </div>
         <div id="spiralchart"></div>
 
         <script type="text/javascript">
