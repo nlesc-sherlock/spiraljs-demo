@@ -21,24 +21,24 @@
         <div id="spiral"></div>
 
         <script type="text/javascript">
-			var arcspiral = new spiral.ArcSpiral(d3.select('#spiral'));
+            var arcspiral = new spiral.ArcSpiral(d3.select('#spiral'));
 
-			var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
+            var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
 
-			var timescale = d3.time.scale()
-			  .domain(extent)
-			  .range([0., 1.]);
+            var timescale = d3.time.scale()
+              .domain(extent)
+              .range([0., 1.]);
 
-			var radius_scale = d3.scale.linear()
-			  .domain([41.9, 42.])
-			  .range([1., 10.]);
+            var radius_scale = d3.scale.linear()
+              .domain([41.9, 42.])
+              .range([1., 10.]);
 
-			var day_ms = 24 * 60 * 60 * 1000;
-			arcspiral.period_fraction = day_ms / (extent[1] - extent[0]);
-		    arcspiral.radial_map = (record) => { return timescale(new Date(record.datestr)); };
+            var day_ms = 24 * 60 * 60 * 1000;
+            arcspiral.period_fraction = day_ms / (extent[1] - extent[0]);
+            arcspiral.radial_map = (record) => { return timescale(new Date(record.datestr)); };
 
             arcspiral.data = data;
-			arcspiral.render();
+            arcspiral.render();
         </script>
     </body>
 </html>
