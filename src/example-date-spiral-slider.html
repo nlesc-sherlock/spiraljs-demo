@@ -9,8 +9,8 @@
         <link rel="stylesheet" type="text/css" href="spiral.css">
 
         <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17/d3.min.js"></script>
-        <!-- <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.js"></script> -->
-        <script type="text/javascript" src="../../spiraljs/dist/spiral.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.5/dist/spiral.js"></script>
+        <!-- script type="text/javascript" src="../../spiraljs/dist/spiral.js"></script> -->
 
         <!-- load local data -->
         <script type="text/javascript" src="data.js"></script>
@@ -21,14 +21,14 @@
 
     <body>
         <p>
-            Demo of a ArcSpiral chart. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
+            Demo of a ArcSpiral chart. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.5.
         </p>
-        <div id="spiral"></div>
+        <div id="spiralchart"></div>
 
         <div id="power"></div>
         <!-- slide between period of one minute to about a month -->
         <div id="slider">
-            <input style="width: 50em;" type="range" id="slider-widget"
+            <input style="margin-left: 50px; margin-right: 50px; width: 735px;" type="range" id="slider-widget"
                 min="1e-6" max="0.0003" step="1e-8" value="1.16e-5"
                 oninput="showValue(1000./this.value,false)"/>
             <span id="slider-value">?</span>
@@ -43,17 +43,19 @@
         <script type="text/javascript">
             function showValue(newValue, move_slider)
             {
+                var day_ms = 24 * 60 * 60 * 1000;
                 if (move_slider)
                 {
                     document.getElementById("slider-widget").value = 1000./newValue;
                 }
-                document.getElementById("slider-value").innerHTML=msToStr(newValue);
+                document.getElementById("slider-value").innerHTML
+                    = "Freq: " + day_ms/newValue + " day<sup>-1</sup>, Period: " + msToStr(newValue);
                 update_period_ms(newValue);
             }
         </script>
 
         <script type="text/javascript">
-            var arcspiral = new spiral.ArcStackSpiral(d3.select('#spiral'));
+            var arcspiral = new spiral.ArcStackSpiral(d3.select('#spiralchart'));
             arcspiral.n_points = 1024;
             arcspiral.category_map = (record) => {
                 var cat = {
@@ -138,7 +140,7 @@
                       ifft = spiral.ifft;
 
                 const N = hist.length,
-                      L = (extent[1].valueOf() - extent[0].valueOf()) / 1000;
+                      L = (extent[1].valueOf() - extent[0].valueOf()) / day_ms;
                       kspace = i => (i <= N / 2 ? i / L : (i - N) / L);
 
                 console.log(L);
@@ -148,12 +150,12 @@
 
                 const xspace = i => (i <= N / 2 ? i : (i - N));
                 const smooth_power = ifft(fft(power).map(
-                            (z, i) => z.times_real(Math.exp(-1 * xspace(i)**2 / 64**2))));
+                            (z, i) => z.times_real(Math.exp(-1 * xspace(i)**2 / 128**2))));
                 const power_data = smooth_power.map((z, i) => { return {x: kspace(i), y: z.real}; });
 
                 power_chart = new spiral.LineChart(d3.select('#power'));
                 power_chart.chartHeight = 150;
-                power_chart.render(power_data.slice(0, N / 2));
+                power_chart.render(power_data.slice(0, 150));
             }
 
             render_power_spectrum(arcspiral.stacked_hist_data);
