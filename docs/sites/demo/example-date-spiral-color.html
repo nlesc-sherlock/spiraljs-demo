@@ -6,66 +6,63 @@
         <title>spiraljs: demo-spiral-color</title>
 
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.css">
+        <style type="text/css">
+            div#description {
+                float: right;
+                width: 30%;
+                margin: 4em;
+            }
+
+            div#spiralchart {
+                clear: none;
+                width: 50%;
+            }
+        </style>
 
         <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17"></script>
         <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.js"></script>
 
         <!-- load local data -->
-        <script type="text/javascript" src="data.js"></script>
+        <script type="text/javascript" src="brwaa_2010-2015.js"></script>
+        <script type="text/javascript" src="brwaa_2010-2015_inctype_categories.js"></script>
+        <script type="text/javascript" src="brwaa_2010-2015_inctype_colors.js"></script>
     </head>
 
     <body>
-        <p>
-            Demo of a BubbleSpiral chart with colored bubbles. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
-        </p>
+        <div id="description">
+            <p>
+                Demo of a BubbleSpiral chart with colored bubbles. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
+            </p>
+            <p>
+                Data from Veiligheidsregio Amsterdam-Amstelland, via the Municipality of Amsterdam Open Data
+                Initiative. The graph shows fire department calls in the city of Amsterdam for 2014. Notable
+                events include a large number of fire-related calls on New Year's Day (red dot in the center),
+                and a massive shower on the 28th of July 2014 that resulted in flooding throughout the city
+                (cyan streak on the left).
+            </p>
+        </div>
         <div id="spiralchart"></div>
 
         <script type="text/javascript">
             var bubblespiral = new spiral.BubbleSpiral(d3.select('#spiralchart'));
 
-            bubblespiral.period_fraction = 1.0 / 5.75;
-
             var xscale = d3.time.scale();
-            xscale.domain(d3.extent(data, (record) => { return new Date(record.datestr); }));
+            var time_extent = d3.extent(data, (record) => { return new Date(record.start_tijd); });
+            xscale.domain(time_extent);
             xscale.range([0., 1.]);
 
-            var primary_categories = [
-                "ARSON",
-                "ASSAULT",
-                "BATTERY",
-                "BURGLARY",
-                "CRIMINAL DAMAGE",
-                "CRIMINAL TRESPASS",
-                "CRIM SEXUAL ASSAULT",
-                "DECEPTIVE PRACTICE",
-                "GAMBLING",
-                "HOMICIDE",
-                "INTERFERENCE WITH PUBLIC OFFICER",
-                "INTIMIDATION",
-                "KIDNAPPING",
-                "LIQUOR LAW VIOLATION",
-                "MOTOR VEHICLE THEFT",
-                "NARCOTICS",
-                "OBSCENITY",
-                "OFFENSE INVOLVING CHILDREN",
-                "OTHER OFFENSE",
-                "PROSTITUTION",
-                "PUBLIC PEACE VIOLATION",
-                "ROBBERY",
-                "SEX OFFENSE",
-                "STALKING",
-                "THEFT",
-                "WEAPONS VIOLATION"
-            ];
+            var one_year = 365.25*24*60*60*1000;
+            var one_month = one_year / 12;
+            var one_week = 7*24*60*60*1000;
+            bubblespiral.period_fraction = one_week / (time_extent[1].getTime() - time_extent[0].getTime());
 
             var map_to_color = (record) => {
-                var index = primary_categories.indexOf(record.primary);
-                var hue = (index / primary_categories.length) * 360.0;
-                return d3.hsl(hue, 1.0, 0.5).rgb().toString();
+                var index = primary_categories.indexOf(record.incident_type);
+                return category_colors[index];
             };
 
-            bubblespiral.radial_map = (record) => { return xscale(new Date(record.datestr)); };
-            bubblespiral.bubble_scale_map = (record) => { return 5.0; };
+            bubblespiral.radial_map = (record) => { return xscale(new Date(record.start_tijd)); };
+            bubblespiral.bubble_scale_map = (record) => { return 3.0; };
             bubblespiral.color_map = map_to_color;
 
             bubblespiral.render(data);
