@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.css">
 
         <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17/d3.min.js"></script>
-        <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.js"></script>
 
         <!-- load local data -->
         <script type="text/javascript" src="data.js"></script>
@@ -18,27 +18,27 @@
         <p>
             Demo of a ArcSpiral chart. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
         </p>
-        <div id="spiral"></div>
+        <div id="spiralchart"></div>
 
         <script type="text/javascript">
-			var arcspiral = new spiral.ArcSpiral(d3.select('#spiral'));
+            var arcspiral = new spiral.ArcSpiral(d3.select('#spiralchart'));
 
-			var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
+            var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
 
-			var timescale = d3.time.scale()
-			  .domain(extent)
-			  .range([0., 1.]);
+            var timescale = d3.time.scale()
+              .domain(extent)
+              .range([0., 1.]);
 
-			var radius_scale = d3.scale.linear()
-			  .domain([41.9, 42.])
-			  .range([1., 10.]);
+            var radius_scale = d3.scale.linear()
+              .domain([41.9, 42.])
+              .range([1., 10.]);
 
-			var day_ms = 24 * 60 * 60 * 1000;
-			arcspiral.period_fraction = day_ms / (extent[1] - extent[0]);
-		    arcspiral.radial_map = (record) => { return timescale(new Date(record.datestr)); };
+            var day_ms = 24 * 60 * 60 * 1000;
+            arcspiral.period_fraction = day_ms / (extent[1] - extent[0]);
+            arcspiral.radial_map = (record) => { return timescale(new Date(record.datestr)); };
 
             arcspiral.data = data;
-			arcspiral.render();
+            arcspiral.render();
         </script>
     </body>
 </html>
