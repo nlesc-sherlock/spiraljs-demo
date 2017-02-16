@@ -43,7 +43,7 @@ RUN git clone https://github.com/nlesc-sherlock/spiraljs-demo.git
 WORKDIR /spiraljs-demo
 
 # Be explicit about which commit we're using
-RUN git checkout 16e19bcc57c17510183ebd36991c6f277d05b6b6
+RUN git checkout 1b284eacabf3201d9dd116c693e6120d2cfa00bf
 
 # install the dependencies listed in package.json
 RUN npm install
