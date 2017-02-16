@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.css">
 
         <script type="text/javascript" src="https://unpkg.com/d3@^3.5.17/d3.min.js"></script>
-        <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.js"></script>
+        <script type="text/javascript" src="https://unpkg.com/spiraljs@1.0.0-alpha.4/dist/spiral.min.js"></script>
 
         <!-- load local data -->
         <script type="text/javascript" src="data.js"></script>
@@ -18,10 +18,10 @@
         <p>
             Demo of a LineSpiral chart. Uses d3@^3.5.17 and spiraljs@1.0.0-alpha.4.
         </p>
-        <div id="spiral"></div>
+        <div id="spiralchart"></div>
 
         <script type="text/javascript">
-			var linespiral = new spiral.LineSpiral(d3.select('#spiral'));
+			var linespiral = new spiral.LineSpiral(d3.select('#spiralchart'));
 
 			var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
 
