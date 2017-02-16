@@ -1,0 +1,24 @@
+#spiral .axis path {
+        stroke: none;
+}
+
+#power .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+}
+
+#power .domain {
+        fill: none;
+        stroke-width: 1px;
+}
+
+#power .axis path {
+        stroke: black;
+        stroke-width: 1px;
+}
+#power .axis line {
+        stroke: black;
+        stroke-width: 1px;
+}
+
