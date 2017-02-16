@@ -33,6 +33,9 @@ EXPOSE 80
 # do the updates
 RUN apt-get update
 
+# install python3
+RUN apt-get install -y python3
+
 # prepare a directory to copy the repository to
 RUN mkdir /spiraljs-demo
 
@@ -47,9 +50,6 @@ RUN npm install
 
 # fill the sites/demo/ directory with the demo website's content
 RUN npm run demo
-
-# install python3
-RUN apt-get install -y python3
 
 # change into the demo directory
 WORKDIR /spiraljs-demo/docs/sites/demo
