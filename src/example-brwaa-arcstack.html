@@ -13,10 +13,10 @@
         <script type="text/javascript" src="../../spiraljs/dist/spiral.js"></script>
 
         <!-- load local data -->
-        <script type="text/javascript" src="data.js"></script>
-        <!-- <script type="text/javascript" src="brwaa_2010-2015.js"></script>
+        <!-- <script type="text/javascript" src="data.js"></script> -->
+        <script type="text/javascript" src="brwaa_2010-2015.js"></script>
         <script type="text/javascript" src="brwaa_2010-2015_inctype_categories.js"></script>
-        <script type="text/javascript" src="brwaa_2010-2015_inctype_colors.js"></script> -->
+        <script type="text/javascript" src="brwaa_2010-2015_inctype_colors.js"></script>
     </head>
 
     <body>
@@ -29,8 +29,8 @@
         <!-- slide between period of one minute to about a month -->
         <div id="slider">
             <input style="width: 50em;" type="range" id="slider-widget"
-                min="1e-6" max="0.0003" step="1e-8" value="1.16e-5"
-                oninput="showValue(1000./this.value,false)"/>
+                min="6.0" max="10.0" step="0.0001"
+                oninput="showValue(10**this.value,false)"/>
             <span id="slider-value">?</span>
         </div>
         <div id="presets">
@@ -45,7 +45,7 @@
             {
                 if (move_slider)
                 {
-                    document.getElementById("slider-widget").value = 1000./newValue;
+                    document.getElementById("slider-widget").value = Math.log10(newValue);
                 }
                 document.getElementById("slider-value").innerHTML=msToStr(newValue);
                 update_period_ms(newValue);
@@ -54,53 +54,18 @@
 
         <script type="text/javascript">
             var arcspiral = new spiral.ArcStackSpiral(d3.select('#spiral'));
-            arcspiral.n_points = 1024;
+            arcspiral.n_points = 4096;
             arcspiral.category_map = (record) => {
-                var cat = {
-                    'CRIM SEXUAL ASSAULT': 'sex',
-                    'GLARY': 'violent',
-                    'STALKING': 'sex',
-                    'GAMBLING': 'light',
-                    'INTERFERENCE WITH PUBLIC OFFICER': 'light',
-                    'THEFT': 'theft',
-                    'ARSON': 'violent',
-                    'OTHER OFFENSE': 'light',
-                    'PROSTITUTION': 'sex',
-                    'MOTOR VEHICLE THEFT': 'theft',
-                    'ROBBERY': 'violent',
-                    'CRIMINAL TRESPASS': 'light',
-                    'DECEPTIVE PRACTICE': 'light',
-                    'OBSCENITY': 'sex',
-                    'SEX OFFENSE': 'sex',
-                    'LIQUOR LAW VIOLATION': 'light',
-                    'OFFENSE INVOLVING CHILDREN': 'violent',
-                    'INTIMIDATION': 'violent',
-                    'WEAPONS VIOLATION': 'violent',
-                    'NARCOTICS': 'light',
-                    'PUBLIC PEACE VIOLATION': 'light',
-                    'BATTERY': 'violent',
-                    'ASSAULT': 'violent',
-                    'CRIMINAL DAMAGE': 'violent',
-                    'HOMICIDE': 'homicide',
-                    'KIDNAPPING': 'kidnapping'
-                };
-
-                return cat[record['primary']];
+                return record['incident_type'];
             }
 
             arcspiral.category_color = (cat) => {
-                var palette = {
-                    'sex': 'red',
-                    'violent': 'blue',
-                    'theft': 'green',
-                    'light': 'yellow',
-                    'homicide': 'black',
-                    'kidnapping': 'brown'
-                };
+                palette = primary_categories.reduce(
+                        (r, c, i) => { r[c] = category_colors[i]; return r; }, {});
                 return palette[cat];
             };
 
-            var extent = d3.extent(data, (record) => { return new Date(record.datestr); })
+            var extent = d3.extent(data, record => new Date(record.start_tijd));
 
             var timescale = d3.time.scale()
               .domain(extent)
@@ -110,7 +75,7 @@
               .domain([41.9, 42.])
               .range([1., 10.]);
 
-            arcspiral.radial_map = (record) => { return timescale(new Date(record.datestr)); };
+            arcspiral.radial_map = (record) => { return timescale(new Date(record.start_tijd)); };
 
             function set_period_ms(ms)
             {
@@ -152,7 +117,6 @@
                 const power_data = smooth_power.map((z, i) => { return {x: kspace(i), y: z.real}; });
 
                 power_chart = new spiral.LineChart(d3.select('#power'));
-                power_chart.chartHeight = 150;
                 power_chart.render(power_data.slice(0, N / 2));
             }
 
