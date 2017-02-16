@@ -3,7 +3,7 @@
 ## in this file):
 # docker build -t image-spiraljs-demo .
 ## Then run the docker container using this command:
-# docker run -p 5001:5000 --name splendid-spirals image-spiraljs-demo
+# docker run -p 5001:80 --name splendid-spirals image-spiraljs-demo
 ##
 ## Now you should be able to open a browser (on the host) and navigate to
 ## http://localhost:5001 and see the webapp being served.
@@ -28,22 +28,19 @@
 FROM node:7.0
 
 # open network port (at outside of the container)
-EXPOSE 5000
+EXPOSE 80
 
 # do the updates
 RUN apt-get update
 
-# install version management git
-RUN apt-get install -y git
+# prepare a directory to copy the repository to
+RUN mkdir /spiraljs-demo
 
-# get a copy of the repository
-RUN git clone https://github.com/nlesc-sherlock/spiraljs-demo.git
+# add files from the docker context to the directory we just prepared
+ADD . /spiraljs-demo/
 
-# change into the directory
+# set the work directory using absolute paths
 WORKDIR /spiraljs-demo
-
-# Be explicit about which commit we're using
-RUN git checkout 1b284eacabf3201d9dd116c693e6120d2cfa00bf
 
 # install the dependencies listed in package.json
 RUN npm install
@@ -58,4 +55,4 @@ RUN apt-get install -y python3
 WORKDIR /spiraljs-demo/docs/sites/demo
 
 # define the container's task: serving the app
-CMD python3 -m http.server 5000
+CMD python3 -m http.server 80
