@@ -6,9 +6,10 @@
   "scripts": {
     "clean": "trash docs/sites/demo",
     "clean-downloaded": "trash node_modules/",
-    "copy-sites-demo-deps": "npm run copy-sites-demo-html && npm run copy-sites-demo-js",
+    "copy-sites-demo-deps": "npm run copy-sites-demo-html && npm run copy-sites-demo-js & npm run copy-sites-demo-css",
     "copy-sites-demo-html": "cp src/*.html docs/sites/demo/",
     "copy-sites-demo-js": "cp src/*.js docs/sites/demo/",
+    "copy-sites-demo-css": "cp src/*.css docs/sites/demo/",
     "demo": "npm run copy-sites-demo-deps",
     "predemo": "npm run clean && mkdirp docs/sites/demo",
     "purge": "npm run clean & npm run clean-downloaded"
